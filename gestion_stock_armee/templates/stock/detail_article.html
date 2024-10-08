@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ article.nom }}{% endblock %}
+
+{% block content %}
+<h1>{{ article.nom }}</h1>
+<p><strong>Catégorie:</strong> {{ article.categorie }}</p>
+<p><strong>Description:</strong> {{ article.description }}</p>
+<p><strong>Quantité:</strong> {{ article.quantite }}</p>
+<p><strong>Date d'ajout:</strong> {{ article.date_ajout }}</p>
+<p><strong>Dernière révision:</strong> {{ article.date_derniere_revision|default:"Jamais" }}</p>
+<p><strong>Période de révision:</strong> {{ article.periode_revision }} jours</p>
+
+<a href="{% url 'modifier_article' article.pk %}" class="btn btn-warning">Modifier</a>
+<a href="{% url 'ajouter_mouvement' %}?article={{ article.pk }}" class="btn btn-primary">Ajouter un mouvement</a>
+
+<h2 class="mt-4">Historique des mouvements</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Quantité</th>
+            <th>Commentaire</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for mouvement in mouvements %}
+            <tr>
+                <td>{{ mouvement.date }}</td>
+                <td>{{ mouvement.get_type_display }}</td>
+                <td>{{ mouvement.quantite }}</td>
+                <td>{{ mouvement.commentaire }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="4">Aucun mouvement enregistré</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
